@@ -1,0 +1,97 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+
+class SG_Controller extends CI_Controller {
+    
+    /**
+     * Model do controller
+     * 
+     */
+    public $model = null;
+
+    /**
+     * Indica se deve pernmitir exclusao multipla
+     *
+     * @var boolean
+     */
+    public $enableMultipleDelete = false;
+
+    /**
+     * Método construtor
+     * 
+     */
+    public function __construct() {
+        parent::__construct();
+        cors();
+
+        // Seta o time zone
+        date_default_timezone_set('America/Sao_Paulo');
+    }
+
+    /**
+     * protectIt
+     * 
+     * Proteje um método do controller
+     * 
+     */
+    public function protectIt( $action, $model = false ) {
+
+        // Verifica se a ação é booleana
+        if ( is_bool( $action ) ) {
+            if ( !$action ) {
+
+                // Seta o erro
+                flash( 'swaErrorBody', 'Você não tem permissão para esta ação!' );
+                close_page( 'auth' );
+
+            } else return true;
+        }
+
+        // Verifica se existe uma model
+        $model = !$model && isset( $this->model ) ? $this->model : false;
+        if ( !$model ) return false;
+
+        // Verifica se o usuário pode fazer a ação
+        if ( !$model->authorize( $action ) ) {
+
+            // Seta o erro
+            if ( auth() ) {
+                flash( 'swaErrorBody', 'Você não tem permissão para esta ação!' );
+                close_page( 'home' );                
+            } else {
+                close_page( 'auth' );
+            }
+        } else return true;
+    }
+
+    /**
+	 * Deleta mais de um item
+	 *
+	 * @return void
+	 */
+	public function delete_mutiples() {
+        if ( !$this->enableMultipleDelete ) return;
+
+		$this->protectIt( 'delete' ); 
+
+		// Carrega os ids
+		$ids = $this->input->post( 'ids' );
+		$ids = $ids ? $ids : [];
+
+		// Percorre o array
+		foreach( $ids as $id ) {
+
+			// Carrega o item
+			$item = $this->model->findById( $id );
+			if ( !$item ) continue;
+
+			// Deleta o item
+			$item->delete();
+		}
+
+		// Seta a mensagem
+		flash( 'swaSuccessBody', 'Ação em massa realizada com sucesso!' );
+		close_page( 'category/list' );
+	}
+}
+
+// End of file
