@@ -171,9 +171,10 @@ class Crons extends SG_Controller {
 			$media = $this->media();
 			$execucoes++;
 		}
-		$this->settings->set( 'execution_time_media', $media );
-		$this->settings->set( 'execution_time_exection', $execucoes );
+		$this->settings->set( 'execution_time_per_time', $media );
+		$this->settings->set( 'executions_in_period', $execucoes );
 		$this->settings->set( 'execution_time_duration', $this->running() );
+		$this->settings->set( 'last_cron_time', date( 'Y-m-d H:i:s', time() ) );
 	}
 }
 
