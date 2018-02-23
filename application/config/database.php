@@ -98,10 +98,11 @@ $db['default'] = array(
 $db['umbler'] = array(
 	'dsn'	=> '',
 	'hostname' => 'mysql427.umbler.com',
-	'username' => 'prod_simple',
+	'username' => 'prod_simple_02',
 	'password' => 'Hj855tkC6CxIkL',
 	'database' => 'prod_simple',
 	'dbdriver' => 'mysqli',
+	'port'     => '41890',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
