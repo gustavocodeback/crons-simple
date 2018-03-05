@@ -63,13 +63,8 @@ class Crons extends SG_Controller {
 		$rss = $this->rss->parse( $row->rss );
 		if ( !$rss ) return;
 
-		// Carrega a lista
-		$total = count( $rss->items );
-		$total = ( $total > 5 ) ? 5 : $total;
-		$items = array_splice( $rss->items, 0, $total );
-
 		// Percorre as noticias
-		foreach( $items as $item ) {
+		foreach( $rss->items as $item ) {
 			$notice = $this->Notice->new();
 			$byLink = $this->Notice->getByLink( $item->getUrl() );
 
