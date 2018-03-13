@@ -34,9 +34,6 @@ class Notice_finder extends SG_Model {
      * @return void
      */
     public function getByLink( $link ) {
-        if( strpos( $link, "'" ) ) {
-            $link = str_replace( "'", "\'", $link );
-        }
         return $this->where( "notice_link LIKE '$link'" )->findOne();
     }
 

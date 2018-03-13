@@ -66,7 +66,7 @@ class Crons extends SG_Controller {
 		// Percorre as noticias
 		foreach( $rss->items as $item ) {
 			$notice = $this->Notice->new();
-			$byLink = $this->Notice->getByLink( $item->getUrl() );
+			$byLink = $this->Notice->getByLink( urlencode( $item->getUrl() ) );
 
 			// Verifica se já esta cadastrado
 			if ( $byLink ) continue;
@@ -88,7 +88,7 @@ class Crons extends SG_Controller {
 			$notice->fill([
 				'gateway_id'     => $row->id,
 				'title'          => $item->getTitle(),
-				'notice_link'    => $item->getUrl(),
+				'notice_link'    => urlencode( $item->getUrl() ),
 				'description'    => $item->resume,
 				'image_link'     => $item->cover ? $item->cover : null,
 				'default_notice' => $row->default_gateway,
