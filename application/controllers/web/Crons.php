@@ -171,6 +171,15 @@ class Crons extends SG_Controller {
 		$this->settings->set( 'execution_time_duration', $this->running() );
 		$this->settings->set( 'last_cron_time', date( 'Y-m-d H:i:s', time() ) );
 	}
+
+	/**
+	 * Limpa as noticias duplicadas
+	 *
+	 * @return void
+	 */
+	public function limpar_duplicadas() {
+	    $this->db->query( ' SET SQL_BIG_SELECTS=1 ; DELETE a FROM notice AS a, notice AS b WHERE a.notice_link=b.notice_link AND a.id < b.id' );
+	}
 }
 
 // End of file
