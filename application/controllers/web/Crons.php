@@ -83,6 +83,13 @@ class Crons extends SG_Controller {
 			$tz = $datetime->getTimezone();
 			$dateTime = new DateTime ($datetime->format( 'Y-m-d H:i:s' ), new DateTimeZone($tz->getName()));
 			$dateTime->setTimezone(new DateTimeZone('America/Sao_Paulo'));
+
+			// Corrige a data
+			$dataAtual = date( 'Y-m-d H:i:s' );
+			$data      = ( strtotime( $dateTime->format('Y-m-d H:i:s') ) > 
+					       strtotime( $dataAtual ) ) ?
+					       $dataAtual : 
+					       $dateTime->format('Y-m-d H:i:s');
 			
 			// Preenche o fill
 			$notice->fill([
@@ -94,7 +101,7 @@ class Crons extends SG_Controller {
 				'default_notice' => $row->default_gateway,
 				'text'           => null,
 				'description'    => null,
-				'date'           => $dateTime->format('Y-m-d H:i:s'),
+				'date'           => $data,
 			]);
 			$notice->save();
 		}
