@@ -173,6 +173,7 @@ class Crons extends SG_Controller {
 			$media = $this->media();
 			$execucoes++;
 		}
+		$this->db->query( "UPDATE notice SET date = now() WHERE date > now()" );
 		$this->settings->set( 'execution_time_per_time', $media );
 		$this->settings->set( 'executions_in_period', $execucoes );
 		$this->settings->set( 'execution_time_duration', $this->running() );
